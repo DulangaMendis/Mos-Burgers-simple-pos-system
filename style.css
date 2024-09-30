@@ -1,0 +1,64 @@
+/* Reset margin and padding for all elements */
+body{
+    background-color: rgb(103, 104, 84);
+}
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Styling for header section */
+header {
+    background-color: #000;
+    color: white;
+}
+
+/* Subheader styling */
+.subheader {
+    background-color: #f0f0f0;
+    padding: 10px;
+}
+
+/* Product card styling */
+.card {
+    border: none;
+    border-radius: 10px;
+    transition: transform 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-10px);
+}
+
+.card-img-top {
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    height: 200px;
+    object-fit: cover;
+}
+
+/* Order summary and total styling */
+.bg-light {
+    background-color: #f8f9fa !important;
+    border-radius: 10px;
+    padding: 20px;
+}
+
+button {
+    margin-right: 10px;
+    border-radius: 10px;
+}
+
+button:hover {
+    opacity: 0.9;
+}
+#banner{
+    height: 500px;
+}
+
+#footer{
+    background-color: rgb(179, 228, 32);
+    width: 100%;
+}
+
