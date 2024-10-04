@@ -59,7 +59,7 @@ function createBurgerCard(burgerName, burgerNo, burgerPrice) {
             <div class="card-body">
                 <h5 class="card-title">Burger No: ${burgerNo}</h5>
                 <p class="card-text">Name: ${burgerName}</p>
-                <p class="card-text">Price: $${burgerPrice}</p>
+                <p class="card-text">Price: Rs.${burgerPrice}</p>
                 <button class="btn btn-success addToCartBtn">Add to Cart</button>
             </div>
         </div>
