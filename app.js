@@ -1,73 +1,124 @@
-// JavaScript Cart Functionality
-let cart = [];
-let totalAmount = 0;
+let totalBill = 0; // Track total bill
+let cartItems = []; // Track items in the cart
 
-// Function to add item to cart
-function addToCart(productName, productPrice) {
-    // Add item to the cart array
-    cart.push({ name: productName, price: productPrice });
-    // Update total price
-    totalAmount += productPrice;
-    // Refresh the cart display
-    updateCartDisplay();
-}
+// Sample burgers array
+const sampleBurgers = [
+    { name: "Classic Beef Burger", no: 1, price: 5.99 },
+    { name: "Cheese Burger", no: 2, price: 6.49 },
+    { name: "Double Beef Burger", no: 3, price: 7.99 },
+    { name: "Chicken Burger", no: 4, price: 5.49 },
+    { name: "Spicy Chicken Burger", no: 5, price: 6.29 },
+    { name: "Vegan Burger", no: 6, price: 6.99 },
+    { name: "Fish Fillet Burger", no: 7, price: 5.79 },
+    { name: "BBQ Bacon Burger", no: 8, price: 8.49 },
+    { name: "Mushroom Swiss Burger", no: 9, price: 7.49 },
+    { name: "Egg and Sausage Burger", no: 10, price: 4.99 }
+];
 
-// Function to update the cart display
-function updateCartDisplay() {
-    const cartItemsList = document.querySelector('.list-unstyled');
-    cartItemsList.innerHTML = ''; // Clear current items
+// Load sample burgers when the page loads
+window.onload = function() {
+    loadSampleBurgers();
+};
 
-    // Add each cart item to the list
-    cart.forEach((item) => {
-        const li = document.createElement('li');
-        li.textContent = `${item.name} - RS ${item.price.toFixed(2)}`;
-        cartItemsList.appendChild(li);
+// Function to load sample burgers
+function loadSampleBurgers() {
+    sampleBurgers.forEach(burger => {
+        createBurgerCard(burger.name, burger.no, burger.price);
     });
-
-    // Update total in the UI
-    document.querySelector('.fs-4').textContent = `RS: ${totalAmount.toFixed(2)}`;
 }
 
-// Function to clear the cart
-function clearCart() {
-    cart = []; // Reset the cart
-    totalAmount = 0; // Reset the total amount
-    updateCartDisplay(); // Refresh the cart display
-}
+// Add new burger to menu when the "Add Burger" button is clicked
+document.getElementById('addBurgerButton').addEventListener('click', function() {
+    // Get values from the input fields
+    let burgerName = document.getElementById('burgerName').value;
+    let burgerNo = document.getElementById('burgerNo').value;
+    let burgerPrice = document.getElementById('burgerPrice').value;
 
-// Function to generate bill
-function generateBill() {
-    if (cart.length === 0) {
-        alert('Cart is empty!');
+    // Ensure all fields are filled
+    if (burgerName === "" || burgerNo === "" || burgerPrice === "") {
+        alert("Please fill all the fields");
         return;
     }
 
-    let billDetails = "Your Order:\n";
-    cart.forEach((item) => {
-        billDetails += `${item.name}: RS ${item.price.toFixed(2)}\n`;
-    });
-    billDetails += `\nTotal: RS ${totalAmount.toFixed(2)}`;
+    // Create the burger card for the new burger
+    createBurgerCard(burgerName, burgerNo, burgerPrice);
 
-    // Display the bill in an alert
-    alert(billDetails);
+    // Clear input fields after burger is added
+    document.getElementById('burgerName').value = "";
+    document.getElementById('burgerNo').value = "";
+    document.getElementById('burgerPrice').value = "";
+});
+
+// Function to create a burger card
+function createBurgerCard(burgerName, burgerNo, burgerPrice) {
+    // Create a new card for the burger
+    let card = document.createElement('div');
+    card.classList.add('col-md-4', 'burger-card');
+    card.innerHTML = `
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Burger No: ${burgerNo}</h5>
+                <p class="card-text">Name: ${burgerName}</p>
+                <p class="card-text">Price: $${burgerPrice}</p>
+                <button class="btn btn-success addToCartBtn">Add to Cart</button>
+            </div>
+        </div>
+    `;
+
+    // Add the new burger card to the menu
+    document.getElementById('burgerMenu').appendChild(card);
+
+    // Add event listener to the "Add to Cart" button
+    card.querySelector('.addToCartBtn').addEventListener('click', function() {
+        addToCart(burgerName, burgerPrice);
+    });
 }
 
-// Event listeners
-document.addEventListener('DOMContentLoaded', () => {
-    // Attach event listeners to all "Add to Cart" buttons
-    document.querySelectorAll('.btn-primary').forEach((button) => {
-        button.addEventListener('click', () => {
-            const productName = button.parentElement.querySelector('.item-name').textContent;
-            const productPrice = parseFloat(button.parentElement.querySelector('.card-title').textContent.replace('RS ', ''));
-            
-            // Add item to cart when clicked
-            addToCart(productName, productPrice);
-        });
+// Function to add an item to the cart
+function addToCart(name, price) {
+    // Add to cart array
+    cartItems.push({ name, price });
+
+    // Update total bill
+    totalBill += parseFloat(price);
+
+    // Update the cart display
+    updateCartDisplay();
+}
+
+// Function to update cart list and total bill
+function updateCartDisplay() {
+    // Get cart list element
+    let cartList = document.getElementById('cartList');
+    cartList.innerHTML = ""; // Clear cart
+
+    // Add each cart item to the list
+    cartItems.forEach(item => {
+        let li = document.createElement('li');
+        li.classList.add('list-group-item', 'cart-item');
+        li.innerHTML = `<span>${item.name}</span><span class="badge badge-primary badge-pill">$${item.price}</span>`;
+        cartList.appendChild(li);
     });
 
-    // Attach event listener to "Clear Cart" button
-    document.querySelector('.btn-danger').addEventListener('click', clearCart);
+    // Update total bill
+    document.getElementById('totalBill').textContent = totalBill.toFixed(2);
+}
 
-    // Attach event listener to "Generate Bill" button
-    document.querySelector('.btn-success').addEventListener('click', generateBill);
+// Event listener for "Generate Bill" button
+document.getElementById('generateBillButton').addEventListener('click', function() {
+    if (cartItems.length === 0) {
+        alert("Your cart is empty!");
+    } else {
+        alert(`Your total bill is $${totalBill.toFixed(2)}.`);
+    }
+});
+
+// Event listener for "Clear Cart" button
+document.getElementById('clearCartButton').addEventListener('click', function() {
+    // Clear the cart items and reset the total bill
+    cartItems = [];
+    totalBill = 0;
+
+    // Update the cart display
+    updateCartDisplay();
 });
